@@ -1,8 +1,14 @@
 -- -*- lua -*-
 require "rfsm"
 require "rfsmpp"
-require "rfsm2uml"
-require "rfsm2tree"
+local rfsm2uml_loaded, err = pcall(require, "rfsm2uml")
+if not rfsm2uml_loaded then
+  print('Could not load rfsm2uml, error: ' .. tostring(err))
+end
+local rfsm2uml_loaded, err = pcall(require, "rfsm2tree")
+if not rfsm2uml_loaded then
+  print('Could not load rfsm2tree, error: ' .. tostring(err))
+end
 
 if arg and #arg < 1 then
    print("usage: rfsm-sim <fsmfile>")
@@ -74,14 +80,17 @@ function pp()
 end
 
 function uml()
+   assert(rfsm2uml_loaded, "library not loaded")
    rfsm2uml.rfsm2uml(fsm, "png", tmpdir .. "rfsm-uml-tmp.png")
 end
 
 function tree()
+   assert(rfsm2tree_loaded, "library not loaded")
    rfsm2tree.rfsm2tree(fsm, "png",  tmpdir .. "rfsm-tree-tmp.png")
 end
 
 function dot()
+   assert(rfsm2uml_loaded, "library not loaded")
    rfsm2uml.rfsm2dot(fsm, tmpdir .. "rfsm-tmp-uml.dot")
 end
 
